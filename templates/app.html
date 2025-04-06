@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Person Classifier</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./dropzone.min.css">
+    <link rel="stylesheet" href="./app.css">
+
+    <style>
+    .custom-circle-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 5px solid #007bff; /* Bootstrap primary blue */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-circle-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .navbar-brand {
+        font-size: 2.5rem; /* You can increase this to 3rem or more if needed */
+        font-weight: 700;
+        color: #000 !important; /* Force black text */
+    }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-primary justify-content-center">
+    <a class="navbar-brand text-dark h2 mb-0" href="#">Sports Person Classifier</a>
+    </nav>
+
+    <div class="container mt-2 mb-1">
+        <div class="row">
+            <div class="col text-center">
+                <p class="mb-2 px-3 py-2" style="background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; display: inline-block;">
+                    "Just upload an image of someone from the categories below, and the model will tell you who it is!"
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+        <div class="col card-wrapper" data-player="lionel_messi">
+                <div class="card border-0">
+                    <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                        <img class="w-100 h-100" src="./images/messi.jpg" alt="Card image cap">
+                    </div>
+                    <div class="card-body text-center mt-4">
+                        <h4 class="text-uppercase card-title">Lionel Messi</h4>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col card-wrapper" data-player="maria_sharapova">
+                    <div class="card border-0">
+                        <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                            <img class="w-100 h-100" src="./images/sharapova.jpg" alt="Card image cap">
+                        </div>
+                        <div class="card-body text-center mt-4">
+                            <h4 class="text-uppercase card-title">Maria Sharapova</h4>
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            <div class="col card-wrapper" data-player="roger_federer">
+                    <div class="card border-0">
+                        <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                            <img class="w-100 h-100" src="./images/federer.jpg" alt="Card image cap">
+                        </div>
+                        <div class="card-body text-center mt-4">
+                            <h4 class="text-uppercase card-title">Roger Federer</h4>
+                            </p>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="col card-wrapper" data-player="serena_williams">
+                <div class="card border-0">
+                    <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                        <img class="w-100 h-100" src="./images/serena.jpeg" alt="Card image cap">
+                    </div>
+                    <div class="card-body text-center mt-4">
+                        <h4 class="text-uppercase card-title">Serena Williams</h4>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col card-wrapper" data-player="virat_kohli">
+                <div class="card border-0">
+                    <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                        <img class="w-100 h-100" src="./images/virat.jpg" alt="Card image cap">
+                    </div>
+                    <div class="card-body text-center mt-4">
+                        <h4 class="text-uppercase card-title">Virat<br>Kohli</h4>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-12 mx-auto">
+                        <form action="/file-upload" class="dropzone" id="dropzone">
+                            <div class="dz-message needsclick">
+                                <img src="./images/upload.png" width="50vw" height="50vw"><br>
+                                <span class="note needsclick">Drop files here or click to upload</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-3 mx-auto">
+                        <button id="submitBtn" type="button" class="btn btn-success">Classify</button>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div id="uploadWarning" class="alert alert-warning text-center" style="display: none;">
+                            Please upload an image before classifying!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-8 error" id="error" >
+                <p>Can't classify image Because Classifier was not able to detect face and two eyes properly.</p>
+                <p>Make sure to upload similar images as shown in above examples.</p>
+            </div>
+
+            <div class="col-sm-4" id="resultHolder">
+            </div>
+            <div class="col-sm-4" id="divClassTable">
+                <table id="classTable">
+                        <tr>
+                            <th>Player</th>
+                            <th>Probability Score</th>
+                        </tr>
+                        <tr>
+                            <td>Leonel Messi</td>
+                            <td id="score_lionel_messi"></td>
+                        </tr>
+                        <tr>
+                            <td>Maria Sharapova</td>
+                            <td id="score_maria_sharapova"></td>
+                        </tr>
+                        <tr>
+                            <td>Rodger Federer</td>
+                            <td id="score_roger_federer"></td>
+                        </tr>
+                        <tr>
+                            <td>Serena Williams</td>
+                            <td id="score_serena_williams"></td>
+                        </tr>
+                        <tr>
+                            <td>Virat Kohli</td>
+                            <td id="score_virat_kohli"></td>
+                        </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="./dropzone.min.js"></script>
+<script src="./app.js"></script>
+</html>
